@@ -10,29 +10,32 @@ import (
 	"net/http"
 )
 
-func GetRequest(ctx context.Context, url string, result any) error {
-	return request(ctx, http.MethodGet, url, nil, result)
+func GetRequest(ctx context.Context, url string, result any, f ...func(req *http.Request)) error {
+	return request(ctx, http.MethodGet, url, nil, result, f...)
 }
 
-func PostRequest(ctx context.Context, url string, reqBody any, result any) error {
-	return request(ctx, http.MethodPost, url, reqBody, result)
+func PostRequest(ctx context.Context, url string, reqBody any, result any, f ...func(req *http.Request)) error {
+	return request(ctx, http.MethodPost, url, reqBody, result, f...)
 }
 
-func PutRequest(ctx context.Context, url string, reqBody io.Reader, result any) error {
-	return request(ctx, http.MethodPut, url, reqBody, result)
+func PutRequest(ctx context.Context, url string, reqBody io.Reader, result any, f ...func(req *http.Request)) error {
+	return request(ctx, http.MethodPut, url, reqBody, result, f...)
 }
 
-func DeleteRequest(ctx context.Context, url string, reqBody io.Reader, result any) error {
-	return request(ctx, http.MethodDelete, url, reqBody, result)
+func DeleteRequest(ctx context.Context, url string, reqBody io.Reader, result any, f ...func(req *http.Request)) error {
+	return request(ctx, http.MethodDelete, url, reqBody, result, f...)
 }
 
-func request(ctx context.Context, method string, url string, reqBody any, result any) error {
+func request(ctx context.Context, method string, url string, reqBody any, result any, f ...func(req *http.Request)) error {
 	b, err := json.Marshal(reqBody)
 	if err != nil {
 		return err
 	}
 	r := bytes.NewReader(b)
 	req, err := http.NewRequestWithContext(ctx, method, url, r)
+	for _, fun := range f {
+		fun(req)
+	}
 	if err != nil {
 		return err
 	}
