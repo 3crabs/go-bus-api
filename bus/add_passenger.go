@@ -2,14 +2,14 @@ package bus
 
 import (
 	"context"
-	"github.com/3crabs/go-bus-api/rest"
+	"github.com/3crabs/go-requests/go-requests"
 	"net/http"
 )
 
 func (b *bus) AddPassenger(ctx context.Context, accessToken string, passenger PassengerCreateDTO) (*PassengerDTO, error) {
 	u := b.createUrl("/v1/passengers", nil)
 	newPassenger := &PassengerDTO{}
-	err := rest.PostRequest(
+	err := requests.PostRequest(
 		ctx,
 		u,
 		passenger,

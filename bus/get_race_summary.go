@@ -3,13 +3,13 @@ package bus
 import (
 	"context"
 	"fmt"
-	"github.com/3crabs/go-bus-api/rest"
+	"github.com/3crabs/go-requests/go-requests"
 )
 
 func (b *bus) GetRaceSummary(ctx context.Context, raceUID string) (*RaceSummaryDTO, error) {
 	u := b.createUrl(fmt.Sprintf("/v1/races/%s/summary", raceUID), nil)
 	raceSummary := &RaceSummaryDTO{}
-	if err := rest.GetRequest(ctx, u, raceSummary); err != nil {
+	if err := requests.GetRequest(ctx, u, raceSummary); err != nil {
 		return nil, err
 	}
 	return raceSummary, nil

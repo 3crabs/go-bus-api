@@ -2,7 +2,7 @@ package bus
 
 import (
 	"context"
-	"github.com/3crabs/go-bus-api/rest"
+	"github.com/3crabs/go-requests/go-requests"
 	"net/url"
 	"strconv"
 )
@@ -16,7 +16,7 @@ func (b *bus) GetRaces(ctx context.Context, fromID, toID int, date string, count
 	}
 	u := b.createUrl("/v1/races", v)
 	races := &[]RaceDTO{}
-	if err := rest.GetRequest(ctx, u, races); err != nil {
+	if err := requests.GetRequest(ctx, u, races); err != nil {
 		return nil, err
 	}
 	return races, nil

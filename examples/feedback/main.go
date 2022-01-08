@@ -3,16 +3,15 @@ package main
 import (
 	"context"
 	"github.com/3crabs/go-bus-api/bus"
+	"github.com/3crabs/go-bus-api/consts"
 	"log"
 )
 
-const busHost = "185.119.59.74:8090"
-
 func main() {
-	b := bus.NewBus("http", busHost)
+	b := bus.NewBus("http", consts.Host)
 
 	f := bus.FeedbackDTO{
-		Phone:   "+7-906-961-25-31",
+		Phone:   "+7-000-000-00-00",
 		Subject: "Проблемы с меню",
 		Text:    "Не работает кнопка назад",
 	}

@@ -2,7 +2,7 @@ package bus
 
 import (
 	"context"
-	"github.com/3crabs/go-bus-api/rest"
+	"github.com/3crabs/go-requests/go-requests"
 )
 
 func (b *bus) Login(ctx context.Context, phone, password string) (*JwtDTO, error) {
@@ -12,7 +12,7 @@ func (b *bus) Login(ctx context.Context, phone, password string) (*JwtDTO, error
 		Password: password,
 	}
 	jwt := &JwtDTO{}
-	err := rest.PostRequest(ctx, u, l, jwt)
+	err := requests.PostRequest(ctx, u, l, jwt)
 	if err != nil {
 		return nil, err
 	}
