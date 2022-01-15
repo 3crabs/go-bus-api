@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	b := bus.NewBus("http", consts.Host)
+	b := bus.NewBus("http", consts.Host, "/api/bus")
 
 	f := bus.FeedbackDTO{
 		Phone:   "+7-000-000-00-00",

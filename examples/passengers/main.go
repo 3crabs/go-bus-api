@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	b := bus.NewBus("http", consts.Host)
+	b := bus.NewBus("http", consts.Host, "/api/bus")
 
 	login, err := b.Login(context.Background(), consts.Login, consts.Password)
 	if err != nil {

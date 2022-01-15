@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	b := bus.NewBus("http", consts.Host)
+	b := bus.NewBus("http", consts.Host, "/api/bus")
 
 	from, err := b.GetPointsFrom(context.Background(), "барнаул")
 	if err != nil {
