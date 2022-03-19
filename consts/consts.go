@@ -1,7 +1,7 @@
 package consts
 
 const (
-	Host     = "185.119.59.74"
-	Login    = "+7-000-000-00-00"
-	Password = "111111"
+	Host     = "passenger.busbonus.ru"
+	Login    = "+7-906-961-25-31"
+	Password = "018560"
 )
