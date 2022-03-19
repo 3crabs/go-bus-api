@@ -1,6 +1,47 @@
 package bus
 
-import "time"
+import (
+	"context"
+	"fmt"
+	"github.com/3crabs/go-requests/go-requests"
+	"net/url"
+	"strconv"
+	"time"
+)
+
+type RaceDTO struct {
+	ArrivalDate        time.Time `json:"arrivalDate"`
+	ArrivalPointId     int       `json:"arrivalPointId"`
+	ArrivalStationName string    `json:"arrivalStationName"`
+	BusInfo            string    `json:"busInfo"`
+	Carrier            string    `json:"carrier"`
+	CarrierInn         string    `json:"carrierInn"`
+	Clazz              struct {
+		Id   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"clazz"`
+	DataRequired        bool      `json:"dataRequired"`
+	DepotId             int       `json:"depotId"`
+	DispatchDate        time.Time `json:"dispatchDate"`
+	DispatchPointId     int       `json:"dispatchPointId"`
+	DispatchStationName string    `json:"dispatchStationName"`
+	FreeSeatCount       int       `json:"freeSeatCount"`
+	FreeSeatEstimation  string    `json:"freeSeatEstimation"`
+	FromCache           bool      `json:"fromCache"`
+	Name                string    `json:"name"`
+	Num                 string    `json:"num"`
+	Price               float64   `json:"price"`
+	Status              struct {
+		Id   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"status"`
+	SupplierPrice float64 `json:"supplierPrice"`
+	Type          struct {
+		Id   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"type"`
+	Uid string `json:"uid"`
+}
 
 type RaceSummaryDTO struct {
 	Depot struct {
@@ -83,3 +124,31 @@ type RaceSummaryDTO struct {
 		TicketClass string  `json:"ticketClass"`
 	} `json:"ticketTypes"`
 }
+
+func (b *bus) GetRaces(ctx context.Context, fromID, toID int, date string, count int) (*[]RaceDTO, error) {
+	v := url.Values{
+		"from":  []string{strconv.Itoa(fromID)},
+		"to":    []string{strconv.Itoa(toID)},
+		"date":  []string{date},
+		"count": []string{strconv.Itoa(count)},
+	}
+	u := b.createUrl("/v1/races", v)
+	races := &[]RaceDTO{}
+	if err := requests.GetRequest(ctx, u, races); err != nil {
+		return nil, err
+	}
+	return races, nil
+}
+
+func (b *bus) GetRaceSummary(ctx context.Context, raceUID string) (*RaceSummaryDTO, error) {
+	u := b.createUrl(fmt.Sprintf("/v1/races/%s/summary", raceUID), nil)
+	raceSummary := &RaceSummaryDTO{}
+	if err := requests.GetRequest(ctx, u, raceSummary); err != nil {
+		return nil, err
+	}
+	return raceSummary, nil
+}
+
+// TODO: бронирование билетов на рейс
+
+// TODO: бронирование билетов на 2 рейса

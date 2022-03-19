@@ -1,4 +1,2 @@
-github.com/3crabs/go-requests v1.0.0 h1:bgnj2hcXfKJSd30j389I6Hq+sQFDz6TkV0RtxN0buEY=
-github.com/3crabs/go-requests v1.0.0/go.mod h1:JeqMDZle1hCeaJgDW/YbgNVHhJ1UX4uwLFBoRD7W+Dc=
-github.com/3crabs/go-requests v1.0.1 h1:p9m0465l5AMzvPplYvyMmj13ZP7UwfNVb0CT3OBJYc4=
-github.com/3crabs/go-requests v1.0.1/go.mod h1:lgVLltzn4GwoXX2DhxTyea4EaWcPaIUh2AYJl/3T6I0=
+github.com/3crabs/go-requests v1.1.0 h1:ytj4iJNusSHmB3QcPgR7J+47lgGUJzorVWWVE8MUs/A=
+github.com/3crabs/go-requests v1.1.0/go.mod h1:lgVLltzn4GwoXX2DhxTyea4EaWcPaIUh2AYJl/3T6I0=
