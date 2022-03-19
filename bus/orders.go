@@ -71,6 +71,58 @@ type OrderDTO struct {
 	Total int `json:"total"`
 }
 
+type SaleRequest struct {
+	Birthday       time.Time `json:"birthday"`
+	Citizenship    string    `json:"citizenship"`
+	DocNum         string    `json:"docNum"`
+	DocSeries      string    `json:"docSeries"`
+	DocTypeCode    string    `json:"docTypeCode"`
+	FirstName      string    `json:"firstName"`
+	Gender         string    `json:"gender"`
+	LastName       string    `json:"lastName"`
+	MiddleName     string    `json:"middleName"`
+	Phone          string    `json:"phone"`
+	SeatCode       string    `json:"seatCode"`
+	TicketTypeCode string    `json:"ticketTypeCode"`
+}
+
+type TourDTO struct {
+	First struct {
+		RaceUid string `json:"raceUid"`
+		Sales   []struct {
+			Birthday       time.Time `json:"birthday"`
+			Citizenship    string    `json:"citizenship"`
+			DocNum         string    `json:"docNum"`
+			DocSeries      string    `json:"docSeries"`
+			DocTypeCode    string    `json:"docTypeCode"`
+			FirstName      string    `json:"firstName"`
+			Gender         string    `json:"gender"`
+			LastName       string    `json:"lastName"`
+			MiddleName     string    `json:"middleName"`
+			Phone          string    `json:"phone"`
+			SeatCode       string    `json:"seatCode"`
+			TicketTypeCode string    `json:"ticketTypeCode"`
+		} `json:"sales"`
+	} `json:"first"`
+	Second struct {
+		RaceUid string `json:"raceUid"`
+		Sales   []struct {
+			Birthday       time.Time `json:"birthday"`
+			Citizenship    string    `json:"citizenship"`
+			DocNum         string    `json:"docNum"`
+			DocSeries      string    `json:"docSeries"`
+			DocTypeCode    string    `json:"docTypeCode"`
+			FirstName      string    `json:"firstName"`
+			Gender         string    `json:"gender"`
+			LastName       string    `json:"lastName"`
+			MiddleName     string    `json:"middleName"`
+			Phone          string    `json:"phone"`
+			SeatCode       string    `json:"seatCode"`
+			TicketTypeCode string    `json:"ticketTypeCode"`
+		} `json:"sales"`
+	} `json:"second"`
+}
+
 func (b *bus) GetOrders(ctx context.Context, accessToken string) (*[]OrderDTO, error) {
 	u := b.createUrl("/v1/orders", nil)
 	orders := &[]OrderDTO{}
@@ -87,4 +139,22 @@ func (b *bus) CancelOrder(ctx context.Context, id int, accessToken string) (*Ord
 		return nil, err
 	}
 	return order, nil
+}
+
+func (b *bus) OrderOnOneRace(ctx context.Context, raceUID string, sales []SaleRequest, accessToken string) (*OrderDTO, error) {
+	u := b.createUrl(fmt.Sprintf("/v1/races/%s/orders", raceUID), nil)
+	busOrder := &OrderDTO{}
+	if err := requests.PostRequest(ctx, u, sales, busOrder, auth(accessToken)); err != nil {
+		return nil, err
+	}
+	return busOrder, nil
+}
+
+func (b *bus) OrderOnTwoRace(ctx context.Context, tourDTO TourDTO, accessToken string) (*OrderDTO, error) {
+	u := b.createUrl("/v1/races/orders", nil)
+	busOrder := &OrderDTO{}
+	if err := requests.PostRequest(ctx, u, tourDTO, busOrder, auth(accessToken)); err != nil {
+		return nil, err
+	}
+	return busOrder, nil
 }

@@ -10,7 +10,7 @@ import (
 func main() {
 	b := bus.NewBus("http", consts.Host, "/api/bus")
 
-	f := bus.FeedbackDTO{
+	f := bus.FeedbackRequest{
 		Phone:   "+7-000-000-00-00",
 		Subject: "Проблемы с меню",
 		Text:    "Не работает кнопка назад",

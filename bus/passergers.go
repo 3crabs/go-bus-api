@@ -24,11 +24,11 @@ type PassengerDTO struct {
 	Phone        string    `json:"phone"`
 }
 
-type ConfirmPassengerEmailResponse struct {
+type ConfirmPassengerEmailDTO struct {
 	Data string `json:"data"`
 }
 
-type PassengerCreateDTO struct {
+type PassengerCreateRequest struct {
 	Birthday    time.Time `json:"birthday"`
 	Citizenship string    `json:"citizenship"`
 	DocNum      string    `json:"docNum"`
@@ -43,7 +43,7 @@ type PassengerCreateDTO struct {
 	Phone       string    `json:"phone"`
 }
 
-func (b *bus) AddPassenger(ctx context.Context, accessToken string, passenger PassengerCreateDTO) (*PassengerDTO, error) {
+func (b *bus) AddPassenger(ctx context.Context, accessToken string, passenger PassengerCreateRequest) (*PassengerDTO, error) {
 	u := b.createUrl("/v1/passengers", nil)
 	newPassenger := &PassengerDTO{}
 	if err := requests.PostRequest(ctx, u, passenger, newPassenger, auth(accessToken)); err != nil {
@@ -61,7 +61,7 @@ func (b *bus) GetPassengers(ctx context.Context, accessToken string) (*[]Passeng
 	return passengers, nil
 }
 
-func (b *bus) PutPassengers(ctx context.Context, id int, newPassenger PassengerDTO, accessToken string) (*PassengerDTO, error) {
+func (b *bus) UpdatePassengers(ctx context.Context, id int, newPassenger PassengerDTO, accessToken string) (*PassengerDTO, error) {
 	u := b.createUrl(fmt.Sprintf("/v1/passengers/%d", id), nil)
 	passenger := &PassengerDTO{}
 	if err := requests.PutRequest(ctx, u, newPassenger, passenger, auth(accessToken)); err != nil {
@@ -75,9 +75,9 @@ func (b *bus) DeletePassenger(ctx context.Context, accessToken string, passenger
 	return requests.DeleteRequest(ctx, u, nil, nil, auth(accessToken))
 }
 
-func (b *bus) ConfirmPassengerEmail(ctx context.Context, id int, accessToken string) (*ConfirmPassengerEmailResponse, error) {
+func (b *bus) ConfirmPassengerEmail(ctx context.Context, id int, accessToken string) (*ConfirmPassengerEmailDTO, error) {
 	u := b.createUrl(fmt.Sprintf("/v1/passengers/%d/confirmEmailRequest", id), nil)
-	confirmPassengerEmailResponse := &ConfirmPassengerEmailResponse{}
+	confirmPassengerEmailResponse := &ConfirmPassengerEmailDTO{}
 	if err := requests.GetRequest(ctx, u, confirmPassengerEmailResponse, auth(accessToken)); err != nil {
 		return nil, err
 	}

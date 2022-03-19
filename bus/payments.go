@@ -14,7 +14,7 @@ type PaymentsUrlDTO struct {
 	URL string `json:"url"`
 }
 
-type PaymentsUrlRequest struct {
+type PaymentsURLRequest struct {
 	OrderIds      []int `json:"orderIds"`
 	PaymentTypeId int   `json:"paymentTypeId"`
 }
@@ -36,7 +36,7 @@ func (b *bus) GetPayments(ctx context.Context, accessToken string) (*[]PaymentTy
 	return paymentTypeDTOs, nil
 }
 
-func (b *bus) GetPaymentsURL(ctx context.Context, paymentsUrlRequest PaymentsUrlRequest, accessToken string) (*PaymentsUrlDTO, error) {
+func (b *bus) GetPaymentsURL(ctx context.Context, paymentsUrlRequest PaymentsURLRequest, accessToken string) (*PaymentsUrlDTO, error) {
 	u := b.createUrl("/v1/payments", nil)
 	paymentsUrl := &PaymentsUrlDTO{}
 	if err := requests.PostRequest(ctx, u, paymentsUrlRequest, paymentsUrl, auth(accessToken)); err != nil {
@@ -45,7 +45,7 @@ func (b *bus) GetPaymentsURL(ctx context.Context, paymentsUrlRequest PaymentsUrl
 	return paymentsUrl, nil
 }
 
-func (b *bus) GetPaymentsRefundTickets(ctx context.Context, refundTicketsRequest RefundTicketsRequest, accessToken string) (*RefundTicketsDTO, error) {
+func (b *bus) RefundTickets(ctx context.Context, refundTicketsRequest RefundTicketsRequest, accessToken string) (*RefundTicketsDTO, error) {
 	u := b.createUrl("/v1/payments/refund", nil)
 	refundTicketsDTO := &RefundTicketsDTO{}
 	if err := requests.PostRequest(ctx, u, refundTicketsRequest, refundTicketsDTO, auth(accessToken)); err != nil {

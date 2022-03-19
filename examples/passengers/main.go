@@ -33,7 +33,7 @@ func main() {
 		}
 	}
 
-	p := bus.PassengerCreateDTO{
+	p := bus.PassengerCreateRequest{
 		Birthday:    time.Time{},
 		Citizenship: "",
 		DocNum:      "",

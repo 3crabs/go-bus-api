@@ -15,7 +15,7 @@ type UserDTO struct {
 	Phone        string `json:"phone"`
 }
 
-type UpdateUserDTO struct {
+type UpdateUserRequest struct {
 	Email      string `json:"email"`
 	FirstName  string `json:"firstName"`
 	LastName   string `json:"lastName"`
@@ -31,7 +31,7 @@ func (b *bus) GetAccount(ctx context.Context, accessToken string) (*UserDTO, err
 	return user, nil
 }
 
-func (b *bus) PutAccount(ctx context.Context, updateUserDTO UpdateUserDTO, accessToken string) (*UserDTO, error) {
+func (b *bus) UpdateAccount(ctx context.Context, updateUserDTO UpdateUserRequest, accessToken string) (*UserDTO, error) {
 	u := b.createUrl("/v1/account", nil)
 	user := &UserDTO{}
 	if err := requests.PutRequest(ctx, u, updateUserDTO, user, auth(accessToken)); err != nil {
