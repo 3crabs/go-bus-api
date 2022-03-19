@@ -1,6 +1,9 @@
 package bus
 
-import "net/url"
+import (
+	"net/http"
+	"net/url"
+)
 
 type bus struct {
 	scheme string
@@ -24,4 +27,10 @@ func (b *bus) createUrl(baseUrl string, params url.Values) string {
 		RawQuery: params.Encode(),
 	}
 	return targetUrl.String()
+}
+
+func auth(accessToken string) func(req *http.Request) {
+	return func(req *http.Request) {
+		req.Header.Add("Authorization", "Bearer "+accessToken)
+	}
 }

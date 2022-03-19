@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/3crabs/go-requests/go-requests"
-	"net/http"
 	"time"
 )
 
@@ -25,6 +24,10 @@ type PassengerDTO struct {
 	Phone        string    `json:"phone"`
 }
 
+type ConfirmPassengerEmailResponse struct {
+	Data string `json:"data"`
+}
+
 type PassengerCreateDTO struct {
 	Birthday    time.Time `json:"birthday"`
 	Citizenship string    `json:"citizenship"`
@@ -43,16 +46,7 @@ type PassengerCreateDTO struct {
 func (b *bus) AddPassenger(ctx context.Context, accessToken string, passenger PassengerCreateDTO) (*PassengerDTO, error) {
 	u := b.createUrl("/v1/passengers", nil)
 	newPassenger := &PassengerDTO{}
-	err := requests.PostRequest(
-		ctx,
-		u,
-		passenger,
-		newPassenger,
-		func(req *http.Request) {
-			req.Header.Add("Authorization", "Bearer "+accessToken)
-		},
-	)
-	if err != nil {
+	if err := requests.PostRequest(ctx, u, passenger, newPassenger, auth(accessToken)); err != nil {
 		return nil, err
 	}
 	return newPassenger, nil
@@ -61,33 +55,31 @@ func (b *bus) AddPassenger(ctx context.Context, accessToken string, passenger Pa
 func (b *bus) GetPassengers(ctx context.Context, accessToken string) (*[]PassengerDTO, error) {
 	u := b.createUrl("/v1/passengers", nil)
 	passengers := &[]PassengerDTO{}
-	err := requests.GetRequest(
-		ctx,
-		u,
-		passengers,
-		func(req *http.Request) {
-			req.Header.Add("Authorization", "Bearer "+accessToken)
-		},
-	)
-	if err != nil {
+	if err := requests.GetRequest(ctx, u, passengers, auth(accessToken)); err != nil {
 		return nil, err
 	}
 	return passengers, nil
 }
 
-func (b *bus) DeletePassenger(ctx context.Context, accessToken string, passengerID int) error {
-	u := b.createUrl(fmt.Sprintf("/v1/passengers/%d", passengerID), nil)
-	return requests.DeleteRequest(
-		ctx,
-		u,
-		nil,
-		nil,
-		func(req *http.Request) {
-			req.Header.Add("Authorization", "Bearer "+accessToken)
-		},
-	)
+func (b *bus) PutPassengers(ctx context.Context, id int, newPassenger PassengerDTO, accessToken string) (*PassengerDTO, error) {
+	u := b.createUrl(fmt.Sprintf("/v1/passengers/%d", id), nil)
+	passenger := &PassengerDTO{}
+	if err := requests.PutRequest(ctx, u, newPassenger, passenger, auth(accessToken)); err != nil {
+		return nil, err
+	}
+	return passenger, nil
 }
 
-// TODO: редактирование пассажира
+func (b *bus) DeletePassenger(ctx context.Context, accessToken string, passengerID int) error {
+	u := b.createUrl(fmt.Sprintf("/v1/passengers/%d", passengerID), nil)
+	return requests.DeleteRequest(ctx, u, nil, nil, auth(accessToken))
+}
 
-// TODO: подтверждение почты пассажира
+func (b *bus) ConfirmPassengerEmail(ctx context.Context, id int, accessToken string) (*ConfirmPassengerEmailResponse, error) {
+	u := b.createUrl(fmt.Sprintf("/v1/passengers/%d/confirmEmailRequest", id), nil)
+	confirmPassengerEmailResponse := &ConfirmPassengerEmailResponse{}
+	if err := requests.GetRequest(ctx, u, confirmPassengerEmailResponse, auth(accessToken)); err != nil {
+		return nil, err
+	}
+	return confirmPassengerEmailResponse, nil
+}

@@ -26,8 +26,7 @@ func (b *bus) Login(ctx context.Context, phone, password string) (*JwtDTO, error
 		Password: password,
 	}
 	jwt := &JwtDTO{}
-	err := requests.PostRequest(ctx, u, l, jwt)
-	if err != nil {
+	if err := requests.PostRequest(ctx, u, l, jwt); err != nil {
 		return nil, err
 	}
 	return jwt, nil
